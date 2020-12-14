@@ -36,6 +36,13 @@ $.ajax({
          method: "GET"
        }).then(function(response) {
            $(".uv").text(response.current.uvi);
+           if (response.current.uvi < 3){
+               $(".uv").addClass("badge-success");
+           }else if (response.current.uvi < 6 && response.current.uvi > 3){
+            $(".uv").addClass("badge-warning");
+           }else if (response.current.uvi >=6){
+            $(".uv").addClass("badge-danger"); 
+           }
            var forecast = response.daily;
 
            for(var i=1; i < 6; i++){
