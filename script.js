@@ -17,12 +17,12 @@ $.ajax({
      console.log(response.coord);
      imgURL = "http://openweathermap.org/img/wn/"+ response.weather[0].icon + "@2x.png";
      currentIconEl = $("<img>").attr("src", imgURL);
-     cityNameEl = $("<h1>").html(searchCity + " ("+ today + ")");
+     cityNameEl = $("<h1>").html(response.name + " ("+ today + ")");
      tempEl = $("<p>").text("Temperature: "+ response.main.temp + `\xB0 F`);
       humidityEl = $("<p>").text("Humidity: " + response.main.humidity + `%`);
       windspeedEl = $("<p>").text("Wind Speed: "+ response.wind.speed + "MPH");
       uvIndex = $("<p>").html("UV Index: <span class = 'uv'></span>");
-      // $(".uv").html HOW TO FIND UV INDEX?
+      $("#weather-display").empty();
      $("#weather-display").append(cityNameEl, currentIconEl, tempEl, humidityEl, windspeedEl, uvIndex);
 
 // for forecast call and population
@@ -61,8 +61,14 @@ $.ajax({
          searchCity = $("#search").val().trim();
          var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=" + searchCity +"&appid=" + APIKey;
         getWeather(queryURL);
-       liTemplate = "<li class = 'list-group-item'>%city</li>";
-        liTemplate = liTemplate.replace("%city", searchCity);
+       liTemplate = "<li data-value = '%val' class = 'list-group-item'>%city</li>";
+        liTemplate = liTemplate.replace("%city", searchCity).replace("%val", searchCity);
         $("ul").append(liTemplate);
         $("#search").val("");
     })
+    $(document).on("click", ".list-group-item", function(){
+        console.log(this);
+        searchCity = $(this).attr("data-value");
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=" + searchCity +"&appid=" + APIKey;
+        getWeather(queryURL);
+    });
