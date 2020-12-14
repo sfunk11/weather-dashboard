@@ -9,6 +9,10 @@ $(document).ready(function(){
     searchCity = localStorage.getItem("city");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=" + searchCity +"&appid=" + APIKey;
         getWeather(queryURL);
+        liTemplate = "<li data-value = '%val' class = 'list-group-item'>%city</li>";
+        liTemplate = liTemplate.replace("%city", searchCity).replace("%val", searchCity);
+        $("ul").append(liTemplate);
+        $("#search").val("");
 });
 
 function getWeather(queryURL){
@@ -78,7 +82,6 @@ $.ajax({
         $("#search").val("");
     })
     $(document).on("click", ".list-group-item", function(){
-        console.log(this);
         searchCity = $(this).attr("data-value");
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=" + searchCity +"&appid=" + APIKey;
         getWeather(queryURL);
