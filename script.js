@@ -5,7 +5,11 @@ dayjs.extend(window.dayjs_plugin_localizedFormat);
 var APIKey = "a71ffd832a9960499b2f56bba5c397e5";
 var searchCity = "Atlanta";
 
-
+$(document).ready(function(){
+    searchCity = localStorage.getItem("city");
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=" + searchCity +"&appid=" + APIKey;
+        getWeather(queryURL);
+});
 
 function getWeather(queryURL){
 $.ajax({
@@ -17,8 +21,8 @@ $.ajax({
      console.log(response.coord);
      imgURL = "http://openweathermap.org/img/wn/"+ response.weather[0].icon + "@2x.png";
      currentIconEl = $("<img>").attr("src", imgURL);
-     cityNameEl = $("<h1>").html(response.name + " ("+ today + ")");
-     tempEl = $("<p>").text("Temperature: "+ response.main.temp + `\xB0 F`);
+     cityNameEl = $("<h2>").html(response.name + " ("+ today + ")");
+     tempEl = $("<p>").text("Temperature: "+ Math.round(response.main.temp) + `\xB0 F`);
       humidityEl = $("<p>").text("Humidity: " + response.main.humidity + `%`);
       windspeedEl = $("<p>").text("Wind Speed: "+ response.wind.speed + "MPH");
       uvIndex = $("<p>").html("UV Index: <span class = 'uv'></span>");
@@ -48,16 +52,16 @@ $.ajax({
            for(var i=1; i < 6; i++){
             date = new Date(forecast[i].dt * 1000);
             imgURL = "http://openweathermap.org/img/wn/"+ forecast[i].weather[0].icon + "@2x.png";
-            dateEl = $("<h5>").text(dayjs(date).format("LL")).attr("class", "card-title");
+            dateEl = $("<h6>").text(dayjs(date).format("MM-DD")).attr("class", "card-title");
             iconEl = $("<img>").attr("src", imgURL);
-            forecastTempEl = $("<p>").text("Temp: "+ forecast[i].temp.day + `\xB0 F`);
+            forecastTempEl = $("<p>").text("Temp: "+ Math.round(forecast[i].temp.day) + `\xB0 F`);
             humidityEl = $("<p>").text("Humidity: " + forecast[i].humidity + `%`);
             forecastid = "#forecast-" + (i);
             $(forecastid).empty();
             $(forecastid).append(dateEl,iconEl,forecastTempEl,humidityEl)
            }
        });
-
+    localStorage.setItem("city", searchCity);
     });
 }
 
