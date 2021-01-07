@@ -21,8 +21,6 @@ $.ajax({
     method: "GET"
   }).then(function(response) {
      coords = response.coord;
-     console.log(response);
-     console.log(response.coord);
      imgURL = "http://openweathermap.org/img/wn/"+ response.weather[0].icon + "@2x.png";
      currentIconEl = $("<img>").attr("src", imgURL);
      cityNameEl = $("<h2>").html(response.name + " ("+ today + ")");
@@ -36,7 +34,6 @@ $.ajax({
 // for forecast call and population
       lat = coords.lat;
       lon = coords.lon;
-      console.log(lat,lon);
      
      forecastURL = "https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + APIKey;
      $.ajax({
